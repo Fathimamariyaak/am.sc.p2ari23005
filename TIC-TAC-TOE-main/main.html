@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #60a2b2;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #083912;
+    }
+
+    .btn {
+      font-size: 18px;
+    }
+
+    .table-bordered {
+      border: 3px solid #6c0505;
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      vertical-align: middle;
+      font-size: 48px;
+      cursor: pointer;
+      border: 3px solid #e6e5e7;
+    }
+
+    #result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h1>Tic Tac Toe</h1>
+  <div class="text-center mt-3 mb-4">
+    <button id="singlePlayerBtn" class="btn btn-primary mr-2">Single Player</button>
+    <button id="twoPlayerBtn" class="btn btn-primary">Two Players</button>
+    <button id="undoBtn" class="btn btn-danger ml-2" disabled>Undo</button>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <table class="table-bordered">
+        <tr>
+          <td class="cell" id="cell-0"></td>
+          <td class="cell" id="cell-1"></td>
+          <td class="cell" id="cell-2"></td>
+        </tr>
+        <tr>
+          <td class="cell" id="cell-3"></td>
+          <td class="cell" id="cell-4"></td>
+          <td class="cell" id="cell-5"></td>
+        </tr>
+        <tr>
+          <td class="cell" id="cell-6"></td>
+          <td class="cell" id="cell-7"></td>
+          <td class="cell" id="cell-8"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div id="result" class="text-center mt-3"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+  const PLAYER_X = 'X';
+  const PLAYER_O = 'O';
+  let currentPlayer = PLAYER_X;
+  let isSinglePlayer = false;
+  let board = ['', '', '', '', '', '', '', '', ''];
+  let undoStack = [];
+
+  const checkWin = () => {
+    const winConditions = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+      [0, 4, 8], [2, 4, 6] // diagonals
+    ];
+
+    for (let condition of winConditions) {
+      const [a, b, c] = condition;
+      if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+        return board[a];
+      }
+    }
+
+    if (board.every(cell => cell !== '')) {
+      return 'draw';
+    }
+
+    return null;
+  };
+
+  const updateCell = (index) => {
+    if (board[index] === '') {
+      board[index] = currentPlayer;
+      $('#cell-' + index).text(currentPlayer);
+      undoStack.push(index);
+      checkGameResult();
+      currentPlayer = currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
+    }
+  };
+
+  const undoLastMove = () => {
+    if (undoStack.length > 0) {
+      const lastIndex = undoStack.pop();
+      board[lastIndex] = '';
+      $('#cell-' + lastIndex).text('');
+      currentPlayer = currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
+    }
+  };
+
+  const checkGameResult = () => {
+    const winner = checkWin();
+    if (winner) {
+      if (winner === 'draw') {
+        $('#result').text('It\'s a draw!');
+      } else {
+        $('#result').text(`Player ${winner} wins!`);
+      }
+      $('.cell').off('click');
+      $('#undoBtn').prop('disabled', true);
+    }
+  };
+
+  const initializeGame = () => {
+    board = ['', '', '', '', '', '', '', '', ''];
+    undoStack = [];
+    currentPlayer = PLAYER_X;
+    $('#result').text('');
+    $('.cell').text('').on('click', function() {
+      const cellIndex = parseInt($(this).attr('id').split('-')[1]);
+      if (isSinglePlayer && currentPlayer === PLAYER_O) return;
+      updateCell(cellIndex);
+    });
+    $('#undoBtn').prop('disabled', false).on('click', undoLastMove);
+  };
+
+  $('#twoPlayerBtn').on('click', function() {
+    isSinglePlayer = false;
+    initializeGame();
+  });
+
+  $('#singlePlayerBtn').on('click', function() {
+    isSinglePlayer = true;
+    initializeGame();
+    if (currentPlayer === PLAYER_O) {
+      // AI makes the first move
+      makeAIMove();
+    }
+  });
+
+  const makeAIMove = () => {
+    // Simple AI logic: Choose the first available empty cell
+    const emptyCells = board.reduce((acc, val, index) => {
+      if (val === '') acc.push(index);
+      return acc;
+    }, []);
+    const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    updateCell(randomIndex);
+  };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Album</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* CSS for styling the photo album */
+        body {
+            background-color: #d0d4d9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .photo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .photo {
+            margin: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .photo:hover {
+            transform: scale(1.05);
+        }
+        .photo img {
+            width:200px; /* Adjust the width to your desired size */
+            height:200px; /* Adjust the height to your desired size */
+            object-fit: cover; /* Maintain aspect ratio while filling the box */
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .btn-group button {
+            margin-right: 10px;
+        }
+        #imageCanvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: blue;">kitty's world</h1>
+    <div class="photo-container">
+        <div class="photo">
+            <img src="assets/181afeedeba499880364ff716d9cc343.jpg" alt="Photo 1">
+        </div>
+        <div class="photo">
+            <img src="assets/49748610_986486438204237_6777699179942274812_n-5c4b811fc9e77c0001f32142.jpg" alt="Photo 2">
+        </div>
+        <div class="photo">
+            <img src="assets/4982501754_81ef9f69da_b-5c49ff3346e0fb0001245dff.jpg" alt="Photo 3">
+        </div>
+        <div class="photo">
+            <img src="assets/5652581247_cb1bfdd5b0_b-960x540.jpg" alt="Photo 4">
+        </div>
+        <div class="photo">
+            <img src="assets/6c16981fee2be370982580633cc3c0d5.jpg" alt="Photo 5">
+        </div>
+        <div class="photo">
+            <img src="assets/images (1).jpeg" alt="Photo 6">
+        </div>
+        <div class="photo">
+            <img src="assets/images (2).jpeg" alt="Photo 7">
+        </div>
+        <div class="photo">
+            <img src="assets/images (1).jpeg" alt="Photo 8">
+        </div>
+        <div class="photo">
+            <img src="assets/49748610_986486438204237_6777699179942274812_n-5c4b811fc9e77c0001f32142.jpg" alt="Photo 9">
+        </div>
+        <div class="photo">
+            <img src="assets/view-pet-portrait-cat-mammal-close-843475-pxhere.com-1.jpg" alt="Photo 10">
+        </div>
+        <div class="photo">
+            <img src="assets/5652581247_cb1bfdd5b0_b-960x540.jpg" alt="Photo 11">
+        </div>
+        <div class="photo">
+            <img src="assets/images (3).jpeg" alt="Photo 12">
+        </div>
+    </div>
+</div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <canvas id="imageCanvas"></canvas>
+                <div class="btn-group" role="group">
+                    <button onclick="checkImageColor()" class="btn btn-primary">Check Image Color</button>
+                    <button onclick="makeImageColor('red')" class="btn btn-danger">Make Reddish</button>
+                    <button onclick="makeImageColor('green')" class="btn btn-success">Make Greenish</button>
+                    <button onclick="makeImageColor('blue')" class="btn btn-primary">Make Blueish</button>
+                    <button onclick="duplicateImage()" class="btn btn-secondary">Duplicate Image</button>
+                    <button onclick="increaseBrightness()" class="btn btn-warning">Increase Brightness</button>
+                    <button onclick="reduceResolution()" class="btn btn-info">Reduce Resolution</button>
+                    <button onclick="createAvatar()" class="btn btn-primary">Create Avatar</button>
+                    <button onclick="rgbToGray()" class="btn btn-primary">Convert to Grayscale</button>
+                    <button onclick="generateQRCodeFromImage()" class="btn btn-primary">Generate QR Code from Image</button>
+                    <button onclick="createThumbnails()" class="btn btn-primary">Create Thumbnails</button>
+
+                </div>
+                <p id="result" class="mt-2"></p>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <button onclick="prevImage()" class="btn btn-secondary">Previous</button>
+                <button onclick="nextImage()" class="btn btn-secondary">Next</button>
+            </div>
+        </div>
+    </div>
+    <script src="imageProcessing.js"></script>
+    
+
+</body> 
+</html>
+
